@@ -11,7 +11,6 @@ SEG_LIMIT equ 0xffff    ;TODO 这里用了4位，没有用5位
 CODE_SELECTOR equ  (1<<3)   ;0不能使用，这里是假设1是代码段选择子，2是数据段选择子
 DATA_SELECTOR equ  (2<<3)
 
-
 [SECTION .text]
 [BITS 16]
 global setup_start
