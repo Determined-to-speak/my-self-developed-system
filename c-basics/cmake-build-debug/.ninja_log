@@ -1,0 +1,8 @@
+# ninja log v5
+148	251	1702798114255077942	c-basics	8f9f1612a43a712a
+0	260	1702798040463790660	CMakeFiles/c-basics.dir/c-grammar/c-study.cpp.o	88829fc56f6b0ae0
+287	407	1700845246590889189	Ctest	cd7d105e8dcbad68
+1	57	1702798377228389805	build.ninja	2300fd4e081c0cb8
+1	67	1702798391580237810	CMakeFiles/c-basics.dir/home/ziya/Kernel/my-self-developed-system/lib/string.c.o	3f488269ae137c86
+2	77	1702798391592237684	CMakeFiles/c-basics.dir/c-grammar/c-study.cpp.o	658c7a6f137aa9a
+78	145	1702798391660236962	c-basics	d71545ab847b5b36
