@@ -1,35 +1,19 @@
 [section .data]
 global charge_char
-charge_char db 'l'
+charge_char db 'lzj'
 
 [section .text]
-[BITS 16]
+[BITS 32]
+extern kernel_main
+
 global head_start
 head_start:
-    ; 设置屏幕模式为文本模式，清除屏幕
-    mov ax, 3
-    int 0x10
 
-    ; 跳过去
-    mov     si, print_str
-    call    print
+    xchg bx,bx
+    ;TODO 这里踩到坑了，不知道为什么，这里不能使用int 0x10进行打印，具体的问题有时间抽空分析
+    call kernel_main
 
-    jmp     $
+    jmp $
 
-print:
-    mov ah, 0x0e
-    mov bh, 0
-    mov bl, 0x01
-.loop:
-    mov al, [si]
-    cmp al, 0
-    jz .done
-    int 0x10
-
-    inc si
-    jmp .loop
-.done:
-    ret
-
-print_str:
+jmp_to_head:
     db "success", 10, 13, 0

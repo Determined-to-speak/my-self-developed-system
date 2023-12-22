@@ -4,4 +4,4 @@ project(c-basics)
 
 set(CMAKE_CXX_STANDARD 98)
 
-add_executable(c-basics c-grammar/c-study.cpp c-grammar/c-study.h ../lib/string.c ../include/string.h ../include/asm/io.h ../include/asm/system.h ../include/linux/types.h)
+add_executable(c-basics c-grammar/c-study.cpp c-grammar/c-study.h ../lib/string.c ../include/string.h ../include/asm/io.h ../include/asm/system.h ../include/linux/types.h ../x86/init/main.c)

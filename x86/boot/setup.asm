@@ -1,7 +1,6 @@
-; 0柱面0磁道2扇区
 [ORG  0x500]
 
-[SECTION .kernel_info]
+[SECTION .data]
 KERNEL_ADDRESS equ 0x1200   ;内核在磁盘中的地址
 
 [SECTION .gdt]
@@ -17,11 +16,11 @@ gdt_base:
 gdt_code:   ;设置代码段
     dw  SEG_LIMIT & 0xffff
     dw  SEG_BASE & 0xffff
-    db  (SEG_BASE >> 16) & 0xff
+    db  SEG_BASE >> 16 & 0xff
     ;     P_DPL_S_TYPE
     db  0b1_00_1_1000
     ;     G_DB_AVL_LIMIT
-    db  0b1_1_00_0000 | (SEG_LIMIT >> 16 & 0xf)
+    db  0b0_1_00_0000 | (SEG_LIMIT >> 16 & 0xf)
     db  SEG_BASE >> 24 & 0xff
 gdt_data:   ;设置数据段
     dw  SEG_LIMIT & 0xffff
@@ -35,7 +34,6 @@ gdt_data:   ;设置数据段
 gdt_ptr:
     dw  $ - gdt_base ; 这是GDT表的描述符，包含GDT表的大小（16位）和基地址（32位）。这个描述符在加载GDT时会用到。
     dd  gdt_base
-
 
 [SECTION .text]
 [BITS 16]
@@ -53,6 +51,9 @@ setup_start:
     call    print
 
 enter_protected_mode:  ;上面的准备工作做完，开始正式的进入保护模式的流程
+
+    xchg    bx, bx
+
     cli
     lgdt [gdt_ptr]
 
@@ -64,21 +65,23 @@ enter_protected_mode:  ;上面的准备工作做完，开始正式的进入保�
     or eax, 0x1
     mov cr0, eax
 
+    xchg    bx, bx
+
     jmp CODE_SELECTOR:protected_mode
 
-print:  ;正常调用中断打印文本
-    mov ah, 0x0E        ; 功能号 0x0E
-    mov bh, 0x00        ; 页号
-    mov bl, 0x07        ; 字符颜色
+print:
+    mov ah, 0x0e
+    mov bh, 0
+    mov bl, 0x01
 .loop:
     mov al, [si]
-    cmp al,0
-    jz .return
-    int 0x10            ; 调用 INT 0x10 中断
+    cmp al, 0
+    jz .done
+    int 0x10
+
     inc si
     jmp .loop
-
-.return
+.done:
     ret
 
 [BITS 32]
@@ -93,34 +96,45 @@ protected_mode:
     mov esp, 0x9fbff
 
     mov edi, KERNEL_ADDRESS
-    mov ecx, 3
-    mov bl, 60
+    mov ecx, 3  ;这个应该是和makefile中需要读取的seek一致
+    mov bl, 60  ;这个应该是和makefile中需要读取的count一致
     call read_hd
+
+    xchg    bx, bx
 
     jmp CODE_SELECTOR:KERNEL_ADDRESS
 
 read_hd:
+    ; 0x1f2 8bit 指定读取或写入的扇区数
     mov dx, 0x1f2
     mov al, bl
     out dx, al
 
+    ; 0x1f3 8bit iba地址的第八位 0-7
     inc dx
     mov al, cl
     out dx, al
 
+    ; 0x1f4 8bit iba地址的中八位 8-15
     inc dx
     mov al, ch
     out dx, al
 
+    ; 0x1f5 8bit iba地址的高八位 16-23
     inc dx
     shr ecx, 16
     mov al, cl
     out dx, al
 
+    ; 0x1f6 8bit
+    ; 0-3 位iba地址的24-27
+    ; 4 0表示主盘 1表示从盘
+    ; 5、7位固定为1
+    ; 6 0表示CHS模式，1表示LAB模式
     inc dx
     shr ecx, 8
     and cl, 0b1111
-    mov al, 0b1110_0000
+    mov al, 0b1110_0000     ; LBA模式
     or al, cl
     out dx, al
 
