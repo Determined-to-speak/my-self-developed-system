@@ -4,18 +4,15 @@
 
 #include "../include/x86/console.h"
 #include "../../x86/include/x86/myio.h"
+#include "../kernel/printk.c"
 
 extern char first_char;
 
-//extern char in_byte(int port);
-//
-//extern short in_word(int port);
-//
-//extern void out_byte(int port, int v);
-//
-//extern void out_word(int port, int v);
-
 void printk_main();
+
+void cursor_movement();
+
+int printk(const char *fmt, ...);
 
 void kernel_main(void) {
     int a = 0;
@@ -23,17 +20,14 @@ void kernel_main(void) {
     char *video = (char *) 0xb8000;
     *video = 'z';
 
+    cursor_movement();
     printk_main();
 
     return;
 }
 
-
-void printk_main() {
-
+void cursor_movement() {
     console_init();
-
-    char *s = "lzj";
 
     //region    测试光标
     ushort position = 130;
@@ -45,8 +39,13 @@ void printk_main() {
 
     my_out_byte(0x3D4, 0x0f);
     my_out_word(0x3D5, current_low_position);
-
-    while (true);
     //endregion
+}
+
+void printk_main() {
+    console_init();
+
+    char *str = "lzj";
+    printk("name: %s\n", str);
 
 }
