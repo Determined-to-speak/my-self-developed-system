@@ -3,9 +3,8 @@
 //
 
 
-#include <stdbool.h>
-#include "../include/string.h"
-#include "../include/linux/types.h"
+#include "../include/x86/string.h"
+#include "../include/x86/linux/types.h"
 
 /**
  * 字符串复制

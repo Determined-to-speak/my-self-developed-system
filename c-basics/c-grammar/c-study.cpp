@@ -3,9 +3,7 @@
 //
 
 
-#include "stdlib.h"
-#include "stdio.h"
-
+#include "../include/c-grammar/c-study.h"
 
 int *test(int x, int y, int z) {
     int a = 0;

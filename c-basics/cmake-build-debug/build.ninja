@@ -11,7 +11,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: c-basics
+# Project: Project
 # Configurations: Debug
 # =============================================================================
 
@@ -40,49 +40,6 @@ include CMakeFiles/rules.ninja
 # Logical path to working directory; prefix for absolute paths.
 
 cmake_ninja_workdir = /home/ziya/Kernel/my-self-developed-system/c-basics/cmake-build-debug/
-# =============================================================================
-# Object build statements for EXECUTABLE target c-basics
-
-
-#############################################
-# Order-only phony target for c-basics
-
-build cmake_object_order_depends_target_c-basics: phony || CMakeFiles/c-basics.dir
-
-build CMakeFiles/c-basics.dir/c-grammar/c-study.cpp.o: CXX_COMPILER__c-basics_Debug /home/ziya/Kernel/my-self-developed-system/c-basics/c-grammar/c-study.cpp || cmake_object_order_depends_target_c-basics
-  DEP_FILE = CMakeFiles/c-basics.dir/c-grammar/c-study.cpp.o.d
-  FLAGS = -g
-  OBJECT_DIR = CMakeFiles/c-basics.dir
-  OBJECT_FILE_DIR = CMakeFiles/c-basics.dir/c-grammar
-
-build CMakeFiles/c-basics.dir/home/ziya/Kernel/my-self-developed-system/lib/string.c.o: C_COMPILER__c-basics_Debug /home/ziya/Kernel/my-self-developed-system/lib/string.c || cmake_object_order_depends_target_c-basics
-  DEP_FILE = CMakeFiles/c-basics.dir/home/ziya/Kernel/my-self-developed-system/lib/string.c.o.d
-  FLAGS = -g
-  OBJECT_DIR = CMakeFiles/c-basics.dir
-  OBJECT_FILE_DIR = CMakeFiles/c-basics.dir/home/ziya/Kernel/my-self-developed-system/lib
-
-build CMakeFiles/c-basics.dir/home/ziya/Kernel/my-self-developed-system/x86/init/main.c.o: C_COMPILER__c-basics_Debug /home/ziya/Kernel/my-self-developed-system/x86/init/main.c || cmake_object_order_depends_target_c-basics
-  DEP_FILE = CMakeFiles/c-basics.dir/home/ziya/Kernel/my-self-developed-system/x86/init/main.c.o.d
-  FLAGS = -g
-  OBJECT_DIR = CMakeFiles/c-basics.dir
-  OBJECT_FILE_DIR = CMakeFiles/c-basics.dir/home/ziya/Kernel/my-self-developed-system/x86/init
-
-
-# =============================================================================
-# Link build statements for EXECUTABLE target c-basics
-
-
-#############################################
-# Link the executable c-basics
-
-build c-basics: CXX_EXECUTABLE_LINKER__c-basics_Debug CMakeFiles/c-basics.dir/c-grammar/c-study.cpp.o CMakeFiles/c-basics.dir/home/ziya/Kernel/my-self-developed-system/lib/string.c.o CMakeFiles/c-basics.dir/home/ziya/Kernel/my-self-developed-system/x86/init/main.c.o
-  FLAGS = -g
-  OBJECT_DIR = CMakeFiles/c-basics.dir
-  POST_BUILD = :
-  PRE_LINK = :
-  TARGET_FILE = c-basics
-  TARGET_PDB = c-basics.dbg
-
 
 #############################################
 # Utility command for edit_cache
@@ -118,7 +75,12 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 #############################################
 # Folder: /home/ziya/Kernel/my-self-developed-system/c-basics/cmake-build-debug
 
-build all: phony c-basics
+build all: phony
+
+# =============================================================================
+# Unknown Build Time Dependencies.
+# Tell Ninja that they may appear as side effects of build rules
+# otherwise ordered by order-only dependencies.
 
 # =============================================================================
 # Built-in targets

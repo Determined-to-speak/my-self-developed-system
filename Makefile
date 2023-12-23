@@ -50,3 +50,5 @@ bochs: all
 qemu: all
 	qemu-system-x86_64 -hda ./build/hd.img
 
+qemug: all
+	qemu-system-x86_64 -hda ./build/hd.img 	-s -S

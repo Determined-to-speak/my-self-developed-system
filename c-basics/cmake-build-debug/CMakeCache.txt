@@ -142,7 +142,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=c-basics
+CMAKE_PROJECT_NAME:STATIC=Project
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -207,6 +207,15 @@ CMAKE_STRIP:FILEPATH=/usr/bin/strip
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //Value Computed by CMake
+Project_BINARY_DIR:STATIC=/home/ziya/Kernel/my-self-developed-system/c-basics/cmake-build-debug
+
+//Value Computed by CMake
+Project_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+Project_SOURCE_DIR:STATIC=/home/ziya/Kernel/my-self-developed-system/c-basics
+
+//Value Computed by CMake
 c-basics_BINARY_DIR:STATIC=/home/ziya/Kernel/my-self-developed-system/c-basics/cmake-build-debug
 
 //Value Computed by CMake
@@ -214,6 +223,24 @@ c-basics_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 c-basics_SOURCE_DIR:STATIC=/home/ziya/Kernel/my-self-developed-system/c-basics
+
+//Value Computed by CMake
+system/c-basics_BINARY_DIR:STATIC=/home/ziya/Kernel/my-self-developed-system/c-basics/cmake-build-debug
+
+//Value Computed by CMake
+system/c-basics_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+system/c-basics_SOURCE_DIR:STATIC=/home/ziya/Kernel/my-self-developed-system/c-basics
+
+//Value Computed by CMake
+system_BINARY_DIR:STATIC=/home/ziya/Kernel/my-self-developed-system/c-basics/cmake-build-debug
+
+//Value Computed by CMake
+system_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+system_SOURCE_DIR:STATIC=/home/ziya/Kernel/my-self-developed-system/c-basics
 
 
 ########################

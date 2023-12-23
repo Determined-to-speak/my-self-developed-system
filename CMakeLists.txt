@@ -1,0 +1,9 @@
+cmake_minimum_required(VERSION 3.23)
+
+project(system)
+
+set(CMAKE_CXX_STANDARD 98)
+
+ADD_SUBDIRECTORY(c-basics)
+ADD_SUBDIRECTORY(x86)
+ADD_SUBDIRECTORY(x86_64)

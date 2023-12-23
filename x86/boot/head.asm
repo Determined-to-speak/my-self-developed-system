@@ -1,6 +1,6 @@
 [section .data]
-global charge_char
-charge_char db 'lzj'
+global first_char
+first_char db 'l'
 
 [section .text]
 [BITS 32]

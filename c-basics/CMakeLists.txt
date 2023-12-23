@@ -4,4 +4,7 @@ project(c-basics)
 
 set(CMAKE_CXX_STANDARD 98)
 
-add_executable(c-basics c-grammar/c-study.cpp c-grammar/c-study.h ../lib/string.c ../include/string.h ../include/asm/io.h ../include/asm/system.h ../include/linux/types.h ../x86/init/main.c)
+add_executable(c-basics c-grammar/c-study.cpp include/c-grammar/c-study.h)
+
+#将子目录下的项目反馈回主项目
+target_include_directories(c-basics PUBLIC include)

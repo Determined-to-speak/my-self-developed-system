@@ -1,3 +1,2 @@
-/home/ziya/Kernel/my-self-developed-system/c-basics/cmake-build-debug/CMakeFiles/c-basics.dir
 /home/ziya/Kernel/my-self-developed-system/c-basics/cmake-build-debug/CMakeFiles/edit_cache.dir
 /home/ziya/Kernel/my-self-developed-system/c-basics/cmake-build-debug/CMakeFiles/rebuild_cache.dir
