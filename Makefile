@@ -26,7 +26,8 @@ ${BUILD}/system.bin: ${BUILD}/kernel.bin
 	objcopy -O binary ${BUILD}/kernel.bin ${BUILD}/system.bin
 	nm ${BUILD}/kernel.bin | sort > ${BUILD}/system.map
 
-${BUILD}/kernel.bin: ${BUILD}/boot/head.o ${BUILD}/init/main.o
+${BUILD}/kernel.bin: ${BUILD}/boot/head.o ${BUILD}/init/main.o ${BUILD}/lib/string.o ${BUILD}/kernel/chr_drv/console.o \
+	${BUILD}/kernel/asm/myio.o
 	ld -m elf_i386 $^ -o $@ -Ttext 0x1200
 
 ${BUILD}/init/main.o: x86/init/main.c
@@ -34,6 +35,18 @@ ${BUILD}/init/main.o: x86/init/main.c
 	gcc ${CFLAGS} ${DEBUG} -c $< -o $@
 
 ${BUILD}/boot/head.o: x86/boot/head.asm
+	nasm -f elf32 -g $< -o $@
+
+${BUILD}/lib/%.o: x86/lib/%.c
+	$(shell mkdir -p ${BUILD}/lib)
+	gcc ${CFLAGS} ${DEBUG} -c $< -o $@
+
+${BUILD}/kernel/chr_drv/%.o: x86/kernel/chr_drv/%.c
+	$(shell mkdir -p ${BUILD}/kernel/chr_drv)
+	gcc ${CFLAGS} ${DEBUG} -c $< -o $@
+
+${BUILD}/kernel/asm/%.o: x86/kernel/asm/%.asm
+	$(shell mkdir -p ${BUILD}/kernel/asm)
 	nasm -f elf32 -g $< -o $@
 
 #通过asm文件生成.o文件
