@@ -26,11 +26,11 @@ ${BUILD}/system.bin: ${BUILD}/kernel.bin
 	objcopy -O binary ${BUILD}/kernel.bin ${BUILD}/system.bin
 	nm ${BUILD}/kernel.bin | sort > ${BUILD}/system.map
 
-${BUILD}/kernel.bin: ${BUILD}/boot/head.o ${BUILD}/init/main.o ${BUILD}/lib/string.o ${BUILD}/kernel/chr_drv/console.o \
-	${BUILD}/kernel/asm/myio.o
+${BUILD}/kernel.bin: ${BUILD}/boot/head.o ${BUILD}/init/main.o ${BUILD}/init/cpu.o ${BUILD}/lib/string.o ${BUILD}/kernel/chr_drv/console.o \
+	${BUILD}/kernel/asm/myio.o  ${BUILD}/kernel/asm/cpu_correlation.o
 	ld -m elf_i386 $^ -o $@ -Ttext 0x1200
 
-${BUILD}/init/main.o: x86/init/main.c
+${BUILD}/init/%.o: x86/init/%.c
 	$(shell mkdir -p ${BUILD}/init)
 	gcc ${CFLAGS} ${DEBUG} -c $< -o $@
 

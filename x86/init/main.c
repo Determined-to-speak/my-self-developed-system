@@ -8,6 +8,8 @@
 
 extern char first_char;
 
+extern void check_cpu();
+
 void printk_main();
 
 void cursor_movement();
@@ -21,7 +23,10 @@ void kernel_main(void) {
     *video = 'z';
 
     cursor_movement();
+
     printk_main();
+
+    check_cpu();
 
     return;
 }
