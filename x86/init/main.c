@@ -6,8 +6,10 @@
 #include "../../x86/include/x86/myio.h"
 #include "../kernel/printk.c"
 
+//当前字符写在汇编文件中
 extern char first_char;
 
+//当前方法写在汇编文件中
 extern void check_cpu();
 
 void printk_main();

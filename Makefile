@@ -10,18 +10,30 @@ CFLAGS+= -nostdlib		# 不需要标准库
 CFLAGS+= -fno-stack-protector	# 不需要栈保护
 CFLAGS:=$(strip ${CFLAGS})
 
+CFLAGS64 := -m64
+CFLAGS64 += -mcmodel=large
+CFLAGS64 += -fno-builtin	# 不需要 gcc 内置函数
+CFLAGS64 += -nostdinc		# 不需要标准头文件
+CFLAGS64 += -fno-pic		# 不需要位置无关的代码  position independent code
+CFLAGS64 += -fno-pie		# 不需要位置无关的可执行程序 position independent executable
+CFLAGS64 += -nostdlib		# 不需要标准库
+CFLAGS64 += -fno-stack-protector	# 不需要栈保护
+
 DEBUG:= -g
 
 HD_IMG_NAME:= "hd.img"
 
-
+# 磁盘制作
 all: ${BUILD}/boot/boot.o ${BUILD}/boot/setup.o ${BUILD}/system.bin
+#		${BUILD}/x64/system.bin
 	$(shell rm -rf $(BUILD)/$(HD_IMG_NAME))
 	bximage -q -hd=16 -func=create -sectsize=512 -imgmode=flat $(BUILD)/$(HD_IMG_NAME)	#通过bochs模拟一块硬盘
 	dd if=${BUILD}/boot/boot.o of=$(BUILD)/$(HD_IMG_NAME) bs=512 seek=0 count=1 conv=notrunc	#通过dd命令，将.o文件写入到硬盘当中
 	dd if=${BUILD}/boot/setup.o of=$(BUILD)/$(HD_IMG_NAME) bs=512 seek=1 count=2 conv=notrunc
 	dd if=${BUILD}/system.bin of=$(BUILD)/$(HD_IMG_NAME) bs=512 seek=3 count=60 conv=notrunc
+	#dd if=${BUILD}/x64/system.bin of=$(BUILD)/$(HD_IMG_NAME) bs=512 seek=71 count=5000 conv=notrunc
 
+# x86内核使用
 ${BUILD}/system.bin: ${BUILD}/kernel.bin
 	objcopy -O binary ${BUILD}/kernel.bin ${BUILD}/system.bin
 	nm ${BUILD}/kernel.bin | sort > ${BUILD}/system.map
