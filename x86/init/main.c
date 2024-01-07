@@ -18,6 +18,12 @@ void cursor_movement();
 
 int printk(const char *fmt, ...);
 
+void enter_x64();
+
+void prepare_4levelpage_table();
+
+void load_x64_segment_descriptor();
+
 void kernel_main(void) {
     int a = 0;
 
@@ -29,6 +35,8 @@ void kernel_main(void) {
     printk_main();
 
     check_cpu();
+
+    enter_x64();
 
     return;
 }
@@ -54,5 +62,41 @@ void printk_main() {
 
     char *str = "lzj";
     printk("name: %s\n", str);
+}
+
+void enter_x64() {
+
+    //准备4级页表
+    prepare_4levelpage_table();
+
+    //开启PAE位
+    //MOV EAX, CR4        ; 将CR4寄存器的当前值加载到EAX寄存器
+    //OR EAX, 0x20        ; 设置第5位（PAE位）
+    //MOV CR4, EAX        ; 将修改后的值写回CR4寄存器
+    __asm__ volatile("MOV EAX, CR4;"
+                     "OR EAX, 0x20;"
+                     "MOV CR4, EAX;");
+
+    //启用IA32_EFER寄存器的LME（长模式使能）位
+    __asm__ volatile("mov rax, 0xC0000080;"
+                     "rdmsr;"
+                     "or rax, 0x100;" //这里修改的是第8位
+                     "wrmsr");
+
+    //将CR0寄存器中的最高位（PE）置为1，从而开启分页
+    __asm__ volatile("mov eax, cr0;"
+                     "or eax, 0x80000000"
+                     "mov cr0, eax");
+
+    load_x64_segment_descriptor();
+
+    //长跳
+    __asm__ volatile("xchg bx, bx;"
+                     "push 0x0018;"
+                     "push 0x100000;"
+                     "retf;");
+}
+
+void prepare_4levelpage_table() {
 
 }

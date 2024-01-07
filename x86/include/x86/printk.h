@@ -8,5 +8,6 @@
 #include "./stdarg.h"
 #include "console.h"
 
+int printk(const char *fmt, ...);
 
 #endif //SYSTEM_PRINTK_H
