@@ -1,5 +1,6 @@
 //
 // Created by lizhijiangjiang/Determined-to-speak on 23-12-22.
+// linux里常用的工具文件
 //
 
 #ifndef x86_TYPES_H
