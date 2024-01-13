@@ -11,7 +11,7 @@ typedef struct gdtr_x64 {
 }__attribute__((packed)) gdtr_x64;
 
 
-typedef struct gdt_x64_entry {
+typedef struct _gdt_x64_entry {
     unsigned short limit_low;
     unsigned short base_low;
     unsigned char base_middle;
@@ -26,5 +26,7 @@ typedef struct gdt_x64_entry {
     unsigned char g: 1;     //单位 0-1b，1-4k
     unsigned char base_high;
 }__attribute__((packed)) gdt_x64_entry;
+
+void load_x64_segment_descriptor();
 
 #endif //x86_GDT_H

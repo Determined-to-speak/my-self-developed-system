@@ -2,6 +2,10 @@
 
 [SECTION .data]
 KERNEL_ADDRESS equ 0x1200   ;内核在磁盘中的地址
+x64_KERNEL_ADDRESS equ 0x100000
+x64_KERNEL_ADDRESS_ESI_MAX equ 100
+X64_KERNEL_SECTOR_START equ 41  ;此参数需要与makefile中的数据保持一致
+REAL_MODE_STACK_BASE equ 0x7c00
 
 [SECTION .gdt]
 SEG_BASE equ 0
@@ -57,16 +61,15 @@ enter_protected_mode:  ;上面的准备工作做完，开始正式的进入保�
     cli
     lgdt [gdt_ptr]
 
-    in  al, 0x92
-    or  al, 0b10
-    out 0x92, al
+    in    al,  92h
+    or    al,  00000010b
+    out   92h, al
 
     mov eax, cr0
-    or eax, 0x1
+    or eax, 1
     mov cr0, eax
 
-    xchg    bx, bx
-
+xchg  bx, bx
     jmp CODE_SELECTOR:protected_mode
 
 print:
@@ -93,15 +96,36 @@ protected_mode:
     mov fs, ax
     mov gs, ax
 
-    mov esp, 0x9fbff
+    mov esp, REAL_MODE_STACK_BASE
 
     mov edi, KERNEL_ADDRESS
     mov ecx, 3  ;这个应该是和makefile中需要读取的seek一致
-    mov bl, 60  ;这个应该是和makefile中需要读取的count一致
+    mov bl, 30  ;这个应该是和makefile中需要读取的count一致
     call read_hd
 
-    xchg    bx, bx
+xchg  bx, bx
+    xor esi, esi    ;将esi置为0,这里esi的作用就是记录前边读硬盘次数，从而在内存中跳过之前已经使用的空间
 
+.load_x64_kernel:
+
+    mov eax, 0x20000
+    mul esi
+    lea edi, [x64_KERNEL_ADDRESS + eax]     ; 从硬盘中读取数据后放在内存的哪个位置
+
+    mov eax, 256
+    mul esi
+    lea ecx, [X64_KERNEL_SECTOR_START + eax]    ;从哪个扇区开始读
+    mov bl, 0xff ;每次读多少个扇区
+
+    push esi
+    call read_hd
+    pop  esi
+
+    inc esi
+    cmp esi, x64_KERNEL_ADDRESS_ESI_MAX
+    jne .load_x64_kernel
+
+xchg    bx, bx
     jmp CODE_SELECTOR:KERNEL_ADDRESS
 
 read_hd:

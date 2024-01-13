@@ -4,7 +4,7 @@ donot_support_x64_str: db "the cpu do not support x64" ,10,13,0
 support_x64_str: db "the cpu supports x64" ,10,13,0
 is_old_cpu_str: db "the cpu do not support ia32e" ,10,13,0
 
-print_cpu_str_start: db "begin read cpu info..."
+print_cpu_str_start: db "begin read cpu info...",10,13,0
 print_cpu_str: times 50 db 0
 print_cpu_str_end: db 10,13,0
 

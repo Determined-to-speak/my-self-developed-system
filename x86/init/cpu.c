@@ -2,7 +2,7 @@
 // Created by lizhijiangjiang/Determined-to-speak on 23-12-28.
 //
 
-int printk(const char *fmt, ...);
+#include "../include/x86/printk.h"
 
 void check_esp_value() {
     int data = 0;
