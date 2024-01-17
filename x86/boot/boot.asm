@@ -3,7 +3,7 @@
 [ORG  0x7c00]   ;0柱面0磁道1扇区
 
 [SECTION .data]
-BOOT_MAIN_ADDR equ 0x500    ;setup.o的启动地址，一般boot的可用空间比较小
+SETUP_ADDR equ 0x500    ;setup.o的启动地址，一般boot的可用空间比较小
 
 [SECTION .text]
 [BITS 16]
@@ -16,7 +16,7 @@ boot_start:
     xchg bx,bx
 
     ; 将setup读入内存
-    mov edi, BOOT_MAIN_ADDR     ; 读到哪里
+    mov edi, SETUP_ADDR     ; 读到哪里
     mov ecx, 1                  ; 从哪个扇区开始读
     mov bl, 2                   ; 读多少扇区
     call read_hd
@@ -26,7 +26,7 @@ boot_start:
     call    print
 
     xchg    bx,bx
-    jmp     BOOT_MAIN_ADDR
+    jmp     SETUP_ADDR
 
 read_hd:
     ; 0x1f2 8bit 指定读取或写入的扇区数

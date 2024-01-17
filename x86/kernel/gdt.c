@@ -40,7 +40,7 @@ static void create_gdt_data(int index) {
     item->limit_middle = 0xff;
     item->avl = 1;
     item->long_mode = 1;
-    item->db = 0;   //难受这里踩坑了，使用的是16位的段选择，db的值为0
+    item->db = 0;   //难受,这里踩坑了，使用的是16位的段选择，db的值为0
     item->g = 0;
     item->base_high = 0;
 }

@@ -109,7 +109,6 @@ void prepare_4levelpage_table() {
 
     // 准备4级头表
     int *four_level_head_table_addr = (int *) FOUR_LEVEL_HEAD_TABLE_ADDR;
-
     memset(four_level_head_table_addr, 0, 4096);
 
     *four_level_head_table_addr = FIRST_PDPT_ADDR | 3;
@@ -117,7 +116,6 @@ void prepare_4levelpage_table() {
 
     // 页目录指针表
     int *pdpt_addr = (int *) FIRST_PDPT_ADDR;
-
     memset(pdpt_addr, 0, 4096);
 
     *pdpt_addr = FIRST_PDT_ADDR | 3;
@@ -125,26 +123,22 @@ void prepare_4levelpage_table() {
 
     // 页目录表
     int *pdt_addr = (int *) FIRST_PDT_ADDR;
-
     memset(pdt_addr, 0, 4096);
 
-    // 采用2M分页,这里直接填写低端2M内存映射
-    // *pdt_addr = 0 | 0x83;
-    // *(pdt_addr + 1) = 0;
+    //TODO 这里需要搞清楚为什么这样写
+    //采用2M分页,这里直接填写低端2M内存映射
+    *pdt_addr = 0 | 0x83;
+    *(pdt_addr + 1) = 0;
 
     // 2M-4M
-    // *(pdt_addr + 2) = 0x200000 | 0x83;
-    // *(pdt_addr + 3) = 0;
+    *(pdt_addr + 2) = 0x200000 | 0x83;
+    *(pdt_addr + 3) = 0;
 
     // 直接映射0 - 64M
 //    for (int i = 0; i < 50; ++i) {
 //        *(pdt_addr + i * 2) = 0x200000 * i | 0x83;  //这里页目录表的后面直接跟了2M的物理页，这时需要将第七位置为1，所以是0x83
 //        *(pdt_addr + i * 2 + 1) = 0;
 //    }
-
-    // 采用2M分页,这里直接填写低端2M内存映射
-    *pdt_addr = 0 | 0x83;
-    *(pdt_addr + 1) = 0;
 
     __asm__ volatile("xchg bx, bx; mov cr3, ebx"::"b"(four_level_head_table_addr));
 
