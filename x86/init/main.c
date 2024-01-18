@@ -91,10 +91,10 @@ void enter_x64() {
     load_x64_segment_descriptor();
 
     //长跳
-//    __asm__ volatile("push 0x0018;"
-//                     "push 0x100000;"
-//                     "retf;");
-    __asm__ volatile("jmp 0x0018:0x100000");
+    __asm__ volatile("push 0x0018;"
+                     "push 0x100000;"
+                     "retf;");
+//    __asm__ volatile("jmp 0x0018:0x100000");
 
 }
 

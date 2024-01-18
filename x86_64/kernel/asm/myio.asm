@@ -6,7 +6,7 @@ my_in_byte:
     push ebp
     mov ebp, esp
 
-    mov edx, [ebp + 8]
+    mov edx, edi      ; port
     in al, dx
 
     leave
@@ -17,9 +17,8 @@ my_out_byte:
     push ebp
     mov ebp, esp
 
-    mov edx, [ebp + 8]   ;port
-    mov eax, [ebp + 12]    ;value
-
+    mov edx, edi      ; port
+    mov eax, esi      ; value
     out dx, al
 
     leave
@@ -32,7 +31,7 @@ my_in_word:
 
     xor eax, eax
 
-    mov edx, [ebp + 8]      ; port
+    mov edx, edi      ; port
     in ax, dx
 
     leave
@@ -43,8 +42,8 @@ my_out_word:
     push ebp
     mov ebp, esp
 
-    mov edx, [ebp + 8]      ; port
-    mov eax, [ebp + 12]     ; value
+    mov edx, edi      ; port
+    mov eax, esi      ; value
     out dx, ax
 
     leave

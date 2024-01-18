@@ -3,9 +3,13 @@
 [SECTION .data]
 KERNEL_ADDRESS equ 0x1200   ;内核在磁盘中的地址
 x64_KERNEL_ADDRESS equ 0x100000
-x64_KERNEL_ADDRESS_ESI_MAX equ 100
+x64_KERNEL_ADDRESS_ESI_MAX equ 50
 X64_KERNEL_SECTOR_START equ 41  ;此参数需要与makefile中的数据保持一致
 REAL_MODE_STACK_BASE equ 0x7c00
+
+MEMORY_TEST_TIME equ 0
+MEMORY_TEST_TIME_ADDRESS equ 0x7e00
+MEMORY_TEST_BUFFER_ADDRESS equ 0x7e02
 
 [SECTION .gdt]
 SEG_BASE equ 0
@@ -54,6 +58,47 @@ setup_start:
     mov     si, prepare_enter_protected_mode_msg
     call    print
 
+;做内存检测
+;Basic Usage:
+;For the first call to the function, point ES:DI at the destination buffer for the list. Clear EBX. Set EDX to the magic number 0x534D4150. Set EAX to 0xE820 (note that the upper 16-bits of EAX should be set to 0). Set ECX to 24. Do an INT 0x15.
+;If the first call to the function is successful, EAX will be set to 0x534D4150, and the Carry flag will be clear. EBX will be set to some non-zero value, which must be preserved for the next call to the function. CL will contain the number of bytes actually stored at ES:DI (probably 20).
+;For the subsequent calls to the function: increment DI by your list entry size, reset EAX to 0xE820, and ECX to 24. When you reach the end of the list, EBX may reset to 0. If you call the function again with EBX = 0, the list will start over. If EBX does not reset to 0, the function will return with Carry set when you try to access the entry after the last valid entry.
+
+do_e820:
+xchg  bx, bx
+	xor ebx, ebx
+    mov di, MEMORY_TEST_BUFFER_ADDRESS
+
+.memory_test_loop:
+
+	mov edx, 0x0534D4150
+	mov eax, 0xe820
+	mov ecx, 20
+	int 0x15
+
+    jc .memory_check_error   ; 如果出错
+
+	add di, cx
+	inc dword [MEMORY_TEST_TIME]
+
+	cmp ebx, 0
+	jne .memory_test_loop
+
+	mov ax, [MEMORY_TEST_TIME]
+	mov [MEMORY_TEST_TIME_ADDRESS], ax
+
+.memory_check_success:
+    mov si, memory_check_success_msg
+    call print
+
+    jmp enter_protected_mode
+
+.memory_check_error:
+    mov     si, memory_check_error_msg
+    call    print
+
+    jmp $
+
 enter_protected_mode:  ;上面的准备工作做完，开始正式的进入保护模式的流程
 
     xchg    bx, bx
@@ -69,7 +114,7 @@ enter_protected_mode:  ;上面的准备工作做完，开始正式的进入保�
     or eax, 1
     mov cr0, eax
 
-xchg  bx, bx
+    xchg  bx, bx
     jmp CODE_SELECTOR:protected_mode
 
 print:
@@ -103,7 +148,7 @@ protected_mode:
     mov bl, 30  ;这个应该是和makefile中需要读取的count一致
     call read_hd
 
-xchg  bx, bx
+    xchg  bx, bx
     xor esi, esi    ;将esi置为0,这里esi的作用就是记录前边读硬盘次数，从而在内存中跳过之前已经使用的空间
 
 .load_x64_kernel:
@@ -125,7 +170,6 @@ xchg  bx, bx
     cmp esi, x64_KERNEL_ADDRESS_ESI_MAX
     jne .load_x64_kernel
 
-xchg    bx, bx
     jmp CODE_SELECTOR:KERNEL_ADDRESS
 
 read_hd:
@@ -211,3 +255,9 @@ read_hd_data:
 
 prepare_enter_protected_mode_msg:
     db "let's go to the protected mode... ",10, 13, 0
+
+memory_check_error_msg:
+    db "memory check fail...", 10, 13, 0
+
+memory_check_success_msg:
+    db "memory check success...", 10, 13, 0

@@ -3,7 +3,7 @@
 //
 
 #include "../include/x86_64/printk.h"
-#include "vsprintf.c"
+#include "../include/x86_64/vsprintf.h"
 
 static char buf[1024];
 

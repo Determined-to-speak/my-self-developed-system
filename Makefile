@@ -37,7 +37,10 @@ ${BUILD}/x86_64/system.bin: ${BUILD}/x86_64/kernel.bin
 	objcopy -O binary ${BUILD}/x86_64/kernel.bin ${BUILD}/x86_64/system.bin
 	nm ${BUILD}/x86_64/kernel.bin | sort > ${BUILD}/x86_64/system.map
 
-${BUILD}/x86_64/kernel.bin: ${BUILD}/x86_64/boot/head.o ${BUILD}/x86_64/init/main.o
+${BUILD}/x86_64/kernel.bin: ${BUILD}/x86_64/boot/head.o ${BUILD}/x86_64/init/main.o  \
+	 ${BUILD}/x86_64/kernel/console.o ${BUILD}/x86_64/kernel/printk.o ${BUILD}/x86_64/kernel/vsprintf.o \
+	 ${BUILD}/x86_64/kernel/asm/myio.o ${BUILD}/x86_64/kernel/mm/memory.o \
+ 	 ${BUILD}/x86_64/lib/string.o
 	ld -b elf64-x86-64 -o $@ $^ -Ttext 0x100000
 
 ${BUILD}/x86_64/boot/%.o: x86_64/boot/%.asm
@@ -46,6 +49,22 @@ ${BUILD}/x86_64/boot/%.o: x86_64/boot/%.asm
 
 ${BUILD}/x86_64/init/%.o: x86_64/init/%.c
 	$(shell mkdir -p ${BUILD}/x86_64/init)
+	gcc ${DEBUG} ${CFLAGS64} -c $< -o $@
+
+${BUILD}/x86_64/lib/%.o: x86_64/lib/%.c
+	$(shell mkdir -p ${BUILD}/x86_64/lib)
+	gcc ${DEBUG} ${CFLAGS64} -c $< -o $@
+
+${BUILD}/x86_64/kernel/asm/%.o: x86_64/kernel/asm/%.asm
+	$(shell mkdir -p ${BUILD}/x86_64/kernel/asm)
+	nasm -f elf64 ${DEBUG} $< -o $@
+
+${BUILD}/x86_64/kernel/mm/%.o: x86_64/kernel/mm/%.c
+	$(shell mkdir -p ${BUILD}/x86_64/kernel/mm)
+	gcc ${DEBUG} ${CFLAGS64} -c $< -o $@
+
+${BUILD}/x86_64/kernel/%.o: x86_64/kernel/%.c
+	$(shell mkdir -p ${BUILD}/x86_64/kernel)
 	gcc ${DEBUG} ${CFLAGS64} -c $< -o $@
 
 # x86内核使用
@@ -89,7 +108,7 @@ bochs: all
 
 qemug: all
 	qemu-system-x86_64 \
-	-m 32M \
+	-m 3G \
 	-boot c \
 	-cpu Haswell -smp cores=1,threads=2 \
 	-hda ./build/hd.img \
@@ -97,7 +116,7 @@ qemug: all
 
 qemu: all
 	qemu-system-x86_64 \
-	-m 32M \
+	-m 3G \
 	-boot c \
 	-cpu Haswell -smp cores=1,threads=2 \
 	-hda ./build/hd.img

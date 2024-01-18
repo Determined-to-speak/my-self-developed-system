@@ -10,17 +10,17 @@ unsigned long long gdt[256] = {0};
 gdtr_x64 gdtrX64;
 
 static void create_gdt_code(int index) {
-    gdt_x64_entry* item = &gdt[index];
+    gdt_x64_entry *item = &gdt[index];
 
     item->limit_low = 0xffff;
     item->base_low = 0;
     item->base_middle = 0;
-    item->type = 0b1010;
+    item->type = 0b1000;
     item->s = 1;
     item->dpl = 0;
     item->p = 1;
     item->limit_middle = 0xff;
-    item->avl = 1;
+    item->avl = 0;
     item->long_mode = 1;
     item->db = 0;   //难受这里踩坑了，使用的是16位的段选择，db的值为0
     item->g = 0;
@@ -28,7 +28,7 @@ static void create_gdt_code(int index) {
 }
 
 static void create_gdt_data(int index) {
-    gdt_x64_entry* item = &gdt[index];
+    gdt_x64_entry *item = &gdt[index];
 
     item->limit_low = 0xffff;
     item->base_low = 0;
@@ -38,7 +38,7 @@ static void create_gdt_data(int index) {
     item->dpl = 0;
     item->p = 1;
     item->limit_middle = 0xff;
-    item->avl = 1;
+    item->avl = 0;
     item->long_mode = 1;
     item->db = 0;   //难受,这里踩坑了，使用的是16位的段选择，db的值为0
     item->g = 0;
