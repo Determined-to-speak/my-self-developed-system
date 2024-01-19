@@ -18,6 +18,9 @@ typedef struct memory_info {
     ADRS *data;
 } memory_info;
 
+/**
+ * 打印setup.asm里得到的内存信息
+ */
 void print_memory_info();
 
 #endif //x86_64_MEMORY_H

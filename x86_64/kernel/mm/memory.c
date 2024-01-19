@@ -2,7 +2,7 @@
 // Created by lizhijiangjiang/Determined-to-speak on 24-1-18.
 //
 
-#include "../../include/x86_64/memory.h"
+#include "../../include/x86_64/mm/memory.h"
 #include "../../include/x86_64/printk.h"
 
 //MEMORY_TEST_TIME_ADDRESS equ 0x7e00
