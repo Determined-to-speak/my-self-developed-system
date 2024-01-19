@@ -79,13 +79,15 @@ xchg  bx, bx
     jc .memory_check_error   ; 如果出错
 
 	add di, cx
-	inc dword [MEMORY_TEST_TIME]
+	mov eax, [MEMORY_TEST_TIME]
+	add eax, 1
+	mov [MEMORY_TEST_TIME], eax
 
 	cmp ebx, 0
 	jne .memory_test_loop
 
-	mov ax, [MEMORY_TEST_TIME]
-	mov [MEMORY_TEST_TIME_ADDRESS], ax
+	mov eax, [MEMORY_TEST_TIME]
+	mov [MEMORY_TEST_TIME_ADDRESS], eax
 
 .memory_check_success:
     mov si, memory_check_success_msg

@@ -6,7 +6,7 @@
 #define x86_64_PRINTK_H
 
 #include "./stdarg.h"
-#include "console.h"
+#include "./console.h"
 
 int printk(const char *fmt, ...);
 
