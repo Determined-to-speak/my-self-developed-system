@@ -12,9 +12,21 @@ void x64_main() {
     console_init();
     printk("enter the x64 \n");
 
+    //region 内存分配与检测
     print_memory_info();
 
-    while (true) {
-        __asm__ volatile("hlt;");
-    }
+    physics_memory_init();
+
+    int *p = get_free_page();
+    printk("%x\n", p);
+
+    p = get_free_page();
+    printk("%x\n", p);
+
+    free_page(p);
+
+    p = get_free_page();
+    printk("%x\n", p);
+    //endregion
+
 }

@@ -5,8 +5,10 @@
 #ifndef x86_64_BITMAP_H
 #define x86_64_BITMAP_H
 
+#include "../linux/types.h"
+
 /**
- * 位图
+ * 位图       这里放到0x500的位置（以前的setup.asm的位置）
  *
  * 为了方便后续的计算，位图的指针使用 char *
  */
