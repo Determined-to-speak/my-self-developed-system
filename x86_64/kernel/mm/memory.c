@@ -22,14 +22,14 @@ physics_memory_info physicsMemoryInfo;
 physics_memory_map physicsMemoryMap;
 
 /**
- * 初始化
+ * 初始化 physicsMemoryInfo 和 physicsMemoryMap
  */
 void physics_memory_init() {
 
     memory_info *memoryInfo = (memory_info *) MEMORY_TEST_TIME_ADDRESS;
     ADRS *adrs = (ADRS *) MEMORY_TEST_BUFFER_ADDRESS;
 
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 4; ++i) {   //这里直接取了第4条
         ADRS *tmp = adrs + i;
         if (tmp->type == 0) {
             break;
@@ -62,6 +62,7 @@ void physics_memory_init() {
         memset(physicsMemoryMap.bitmap_buf, 0, bit_length);
         bitmap_make(&physicsMemoryMap.bitmap, physicsMemoryMap.bitmap_buf, bit_length, 0);
     }
+
 }
 
 /**
@@ -87,9 +88,13 @@ void *get_free_page() {
     return (void *) ret;
 }
 
-
+/**
+ * 释放某一页
+ * @param p 需要释放的地址
+ */
 void free_page(void *p) {
 
+    //这里右移12位的意思是 除以4k
     int index = ((int) p - physicsMemoryMap.addr_base) >> 12;
 
     bitmap_set(&physicsMemoryMap.bitmap, index, false);

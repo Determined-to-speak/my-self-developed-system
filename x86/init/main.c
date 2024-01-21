@@ -22,6 +22,7 @@ void enter_x64();
 void prepare_4levelpage_table();
 
 void kernel_main(void) {
+
     int a = 0;
 
     char *video = (char *) 0xb8000;
@@ -33,10 +34,9 @@ void kernel_main(void) {
 
     //检查64位CPU是否支持
     check_cpu();
+
     //开始进入64位模式
     enter_x64();
-
-    while (true);
 
 }
 
@@ -126,20 +126,21 @@ void prepare_4levelpage_table() {
     memset(pdt_addr, 0, 4096);
 
     //TODO 这里需要搞清楚为什么这样写
-    //采用2M分页,这里直接填写低端2M内存映射
-    *pdt_addr = 0 | 0x83;
-    *(pdt_addr + 1) = 0;
-
-    // 2M-4M
-    *(pdt_addr + 2) = 0x200000 | 0x83;
-    *(pdt_addr + 3) = 0;
+//    //采用2M分页,这里直接填写低端2M内存映射
+//    *pdt_addr = 0 | 0x83;
+//    *(pdt_addr + 1) = 0;
+//
+//    // 2M-4M
+//    *(pdt_addr + 2) = 0x200000 | 0x83;
+//    *(pdt_addr + 3) = 0;
 
     // 直接映射0 - 64M
-//    for (int i = 0; i < 50; ++i) {
-//        *(pdt_addr + i * 2) = 0x200000 * i | 0x83;  //这里页目录表的后面直接跟了2M的物理页，这时需要将第七位置为1，所以是0x83
-//        *(pdt_addr + i * 2 + 1) = 0;
-//    }
+    for (int i = 0; i < 50; ++i) {
+        *(pdt_addr + i * 2) = 0x200000 * i | 0x83;  //这里页目录表的后面直接跟了2M的物理页，这时需要将第七位置为1，所以是0x83
+        *(pdt_addr + i * 2 + 1) = 0;
+    }
 
-    __asm__ volatile("xchg bx, bx; mov cr3, ebx"::"b"(four_level_head_table_addr));
+    //将4级头表写到cr3寄存器里面
+    __asm__ volatile("mov cr3, ebx"::"b"(four_level_head_table_addr));
 
 }

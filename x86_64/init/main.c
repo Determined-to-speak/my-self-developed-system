@@ -9,6 +9,7 @@
  * 注意汇编调用C语言的函数，不能加static关键字修饰
  */
 void x64_main() {
+
     console_init();
     printk("enter the x64 \n");
 
