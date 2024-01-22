@@ -7,6 +7,8 @@
 
 #include "./bitmap.h"
 
+#define PAGE_SIZE 4096
+
 typedef struct ADRS {
     unsigned int base_addr_low;    //内存基地址的低32位
     unsigned int base_addr_high;   //内存基地址的高32位

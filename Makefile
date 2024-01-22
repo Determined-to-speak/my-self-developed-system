@@ -37,9 +37,11 @@ ${BUILD}/x86_64/system.bin: ${BUILD}/x86_64/kernel.bin
 	objcopy -O binary ${BUILD}/x86_64/kernel.bin ${BUILD}/x86_64/system.bin
 	nm ${BUILD}/x86_64/kernel.bin | sort > ${BUILD}/x86_64/system.map
 
-${BUILD}/x86_64/kernel.bin: ${BUILD}/x86_64/boot/head.o ${BUILD}/x86_64/init/main.o  \
+${BUILD}/x86_64/kernel.bin: ${BUILD}/x86_64/boot/head.o \
+	 ${BUILD}/x86_64/init/main.o \
 	 ${BUILD}/x86_64/kernel/console.o ${BUILD}/x86_64/kernel/printk.o ${BUILD}/x86_64/kernel/vsprintf.o \
-	 ${BUILD}/x86_64/kernel/asm/myio.o ${BUILD}/x86_64/kernel/mm/memory.o ${BUILD}/x86_64/kernel/mm/bitmap.o \
+	 ${BUILD}/x86_64/kernel/asm/myio.o \
+	 ${BUILD}/x86_64/kernel/mm/memory.o ${BUILD}/x86_64/kernel/mm/bitmap.o ${BUILD}/x86_64/kernel/mm/malloc.o \
  	 ${BUILD}/x86_64/lib/string.o
 	ld -b elf64-x86-64 -o $@ $^ -Ttext 0x100000
 
