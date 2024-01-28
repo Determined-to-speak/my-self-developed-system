@@ -18,8 +18,8 @@
 //不可用区域
 #define ZONE_RESERVED 2
 
-physics_memory_info physicsMemoryInfo;
-physics_memory_map physicsMemoryMap;
+physics_memory_info physicsMemoryInfo;  //物理内存信息
+physics_memory_map physicsMemoryMap;    //物理内存位图管理
 
 /**
  * 初始化 physicsMemoryInfo 和 physicsMemoryMap
@@ -51,15 +51,16 @@ void physics_memory_init() {
     //这里右移12位的意思是 除以4k
     physicsMemoryInfo.pages_total = physicsMemoryInfo.valid_mem_size >> 12;
     physicsMemoryInfo.pages_used = 0;
-    physicsMemoryInfo.pages_free = physicsMemoryInfo.pages_total - (PHY_MEMORY_USE_FROM >> 12);
+    physicsMemoryInfo.pages_free = physicsMemoryInfo.pages_total - ((PHY_MEMORY_USE_FROM - VALID_MEMORY_FROM) >> 12);
 
     {
         physicsMemoryMap.addr_base = PHY_MEMORY_USE_FROM;
         physicsMemoryMap.bitmap_buf = (unsigned char *) 0x500;
         physicsMemoryMap.pages_total = physicsMemoryInfo.pages_free;
 
+        memset(physicsMemoryMap.bitmap_buf, 0, 1024);
+
         int bit_length = physicsMemoryMap.pages_total / 8;
-        memset(physicsMemoryMap.bitmap_buf, 0, bit_length);
         bitmap_make(&physicsMemoryMap.bitmap, physicsMemoryMap.bitmap_buf, bit_length, 0);
     }
 

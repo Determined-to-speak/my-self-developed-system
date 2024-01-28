@@ -39,7 +39,7 @@ ${BUILD}/x86_64/system.bin: ${BUILD}/x86_64/kernel.bin
 
 ${BUILD}/x86_64/kernel.bin: ${BUILD}/x86_64/boot/head.o \
 	 ${BUILD}/x86_64/init/main.o \
-	 ${BUILD}/x86_64/kernel/console.o ${BUILD}/x86_64/kernel/printk.o ${BUILD}/x86_64/kernel/vsprintf.o \
+	 ${BUILD}/x86_64/kernel/console.o ${BUILD}/x86_64/kernel/printk.o ${BUILD}/x86_64/kernel/vsprintf.o ${BUILD}/x86_64/kernel/idt.o \
 	 ${BUILD}/x86_64/kernel/asm/myio.o \
 	 ${BUILD}/x86_64/kernel/mm/memory.o ${BUILD}/x86_64/kernel/mm/bitmap.o ${BUILD}/x86_64/kernel/mm/malloc.o \
  	 ${BUILD}/x86_64/lib/string.o

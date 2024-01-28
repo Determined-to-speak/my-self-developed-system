@@ -4,6 +4,7 @@
 
 #include "../include/x86_64/mm/memory.h"
 #include "../include/x86_64/printk.h"
+#include "../include/x86_64/idt.h"
 
 /**
  * 注意汇编调用C语言的函数，不能加static关键字修饰
@@ -30,5 +31,9 @@ void x64_main() {
     printk("%x\n", p);
     //endregion
 
+    //region 检测除零异常
+    idt_init();
+    int i = 10 / 0;
+    //endregion
 
 }

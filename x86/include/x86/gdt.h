@@ -11,7 +11,7 @@ typedef struct gdtr_x64 {
 }__attribute__((packed)) gdtr_x64;
 
 
-typedef struct _gdt_x64_entry {
+typedef struct gdt_x64_entry {
     unsigned short limit_low;
     unsigned short base_low;
     unsigned char base_middle;

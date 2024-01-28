@@ -15,12 +15,12 @@ typedef struct ADRS {
     unsigned int length_low;       //内存块长度的低32位
     unsigned int length_high;      //内存块长度的高32位
     unsigned int type;             //描述内存块的类型
-} ADRS;
+} __attribute__((packed)) ADRS;
 
 typedef struct memory_info {
     unsigned short times;
     ADRS *data;
-} memory_info;
+} __attribute__((packed)) memory_info;
 
 typedef struct physics_memory_info {
     unsigned int addr_start;     // 非内核真实内存起始地址 一般是1M
@@ -29,14 +29,14 @@ typedef struct physics_memory_info {
     unsigned int pages_total;    // 机器物理内存共多少page
     unsigned int pages_free;     // 机器物理内存还剩多少page
     unsigned int pages_used;     // 机器物理内存用了多少page
-} physics_memory_info;
+} __attribute__((packed)) physics_memory_info;
 
-typedef struct {
+typedef struct physics_memory_map {
     unsigned int addr_base;          // 可用物理内存开始位置（内存的type=1）
     unsigned int pages_total;        // 共有多少page
     bitmap bitmap;
     unsigned char *bitmap_buf;
-} physics_memory_map;
+} __attribute__((packed)) physics_memory_map;
 
 void physics_memory_init();
 
