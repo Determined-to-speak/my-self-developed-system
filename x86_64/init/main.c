@@ -33,7 +33,12 @@ void x64_main() {
 
     //region 检测除零异常
     idt_init();
-    int i = 10 / 0;
+    //int i = 10 / 0;
     //endregion
+
+    while (true) {
+        __asm__ volatile("sti;");
+        __asm__ volatile("xchg %bx, %bx; hlt;");
+    }
 
 }

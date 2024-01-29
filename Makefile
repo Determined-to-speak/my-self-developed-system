@@ -40,7 +40,7 @@ ${BUILD}/x86_64/system.bin: ${BUILD}/x86_64/kernel.bin
 ${BUILD}/x86_64/kernel.bin: ${BUILD}/x86_64/boot/head.o \
 	 ${BUILD}/x86_64/init/main.o \
 	 ${BUILD}/x86_64/kernel/console.o ${BUILD}/x86_64/kernel/printk.o ${BUILD}/x86_64/kernel/vsprintf.o ${BUILD}/x86_64/kernel/idt.o \
-	 ${BUILD}/x86_64/kernel/asm/myio.o \
+	 ${BUILD}/x86_64/kernel/asm/myio.o  ${BUILD}/x86_64/kernel/asm/interrupt_handler.o \
 	 ${BUILD}/x86_64/kernel/mm/memory.o ${BUILD}/x86_64/kernel/mm/bitmap.o ${BUILD}/x86_64/kernel/mm/malloc.o \
  	 ${BUILD}/x86_64/lib/string.o
 	ld -b elf64-x86-64 -o $@ $^ -Ttext 0x100000
@@ -110,7 +110,7 @@ bochs: all
 
 qemug: all
 	qemu-system-x86_64 \
-	-m 3G \
+	-m 4G \
 	-boot c \
 	-cpu Haswell -smp cores=1,threads=2 \
 	-hda ./build/hd.img \
@@ -118,7 +118,7 @@ qemug: all
 
 qemu: all
 	qemu-system-x86_64 \
-	-m 3G \
+	-m 4G \
 	-boot c \
 	-cpu Haswell -smp cores=1,threads=2 \
 	-hda ./build/hd.img

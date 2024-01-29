@@ -26,6 +26,10 @@ typedef struct idt_x64_entry {
     int reserved;
 }__attribute__((packed)) idt_x64_entry;
 
+void install_idt(int index, long long handler, short selector, char ist, char dpl);
+
 void idt_init();
+
+extern void clock_interrupt();
 
 #endif //x86_64_IDT_H
