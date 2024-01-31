@@ -30,6 +30,10 @@ void install_idt(int index, long long handler, short selector, char ist, char dp
 
 void idt_init();
 
+void send_eoi(int idt_index);
+
 extern void clock_interrupt();
+
+extern void keymap_interrupt();
 
 #endif //x86_64_IDT_H

@@ -49,7 +49,8 @@ x64_start:
     ;屏蔽所有中断，只接收键盘中断
 .enable_8259a_main:
     ;mov al, 11111110b  ;时钟中断
-    mov al, 11111111b   ;仅剩CPU内部中断
+    ;mov al, 11111111b   ;仅剩CPU内部中断
+    mov al, 11111101b  ;键盘中断
     out 21h, al
 
     ;屏蔽从芯片所有中断响应
