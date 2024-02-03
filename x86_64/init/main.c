@@ -5,6 +5,9 @@
 #include "../include/x86_64/mm/memory.h"
 #include "../include/x86_64/printk.h"
 #include "../include/x86_64/idt.h"
+#include "../include/x86_64/time.h"
+
+long startup_time;
 
 /**
  * 注意汇编调用C语言的函数，不能加static关键字修饰
@@ -35,6 +38,8 @@ void x64_main() {
     idt_init();
     //int i = 10 / 0;
     //endregion
+
+    time_init();
 
     while (true) {
         __asm__ volatile("sti;");

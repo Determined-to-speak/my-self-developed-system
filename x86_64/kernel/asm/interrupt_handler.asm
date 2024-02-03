@@ -4,6 +4,7 @@
 extern clock_interrupt_handler
 extern keymap_handler
 extern exception_handler
+extern rtc_interrupt_handler
 
 global clock_interrupt
 clock_interrupt:
@@ -16,6 +17,18 @@ keymap_interrupt:
     mov   rdi, 0x21
     call  keymap_handler
     iretq
+
+
+global rtc_interrupt
+rtc_interrupt:
+    call rtc_interrupt_handler
+
+    mov al, 0x0c
+    out 0x70, al
+    in al, 0x71     ;这里先读上一次寄存器C，清除之前的状态
+
+    iretq
+
 
 ;进入该中断的栈结构
 ;rip

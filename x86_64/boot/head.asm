@@ -50,18 +50,38 @@ x64_start:
 .enable_8259a_main:
     ;mov al, 11111110b  ;时钟中断
     ;mov al, 11111111b   ;仅剩CPU内部中断
-    mov al, 11111101b  ;键盘中断
+    ;mov al, 11111101b  ;键盘中断
+    mov al, 11111001b  ;键盘中断和RTC中断
     out 21h, al
 
-    ;屏蔽从芯片所有中断响应
+    ;将从片与主片相连
 .disable_8259a_slave:
-    mov al, 11111111b
+    mov al, 11111101b       ;这里需要特别注意，第0位RTC电路的标志位是在后面打开，这里先放过去
     out 0a1h, al
 
+.enbale_rtc:
+    mov al, 0x8b    ;0x8b代表使用寄存器B，并阻断NMI
+    out 0x70, al
+
+    ;mov al, 0x12    ;寄存器的第一位和第四位设置为1
+    mov al, 0x52     ;寄存器的第一位，第四位，第六位设置为1
+    out 0x71, al
+
+    mov al, 0x8a      ;CMOS寄存器A
+    out 0x70, al
+    mov al, 0x2f      ;32kHz，500ms的周期性中断
+    out 0x71, al      ;写回CMOS寄存器A
+
+    mov al, 0x0c
+    out 0x70, al
+    in al, 0x71     ;这里先读上一次寄存器C，清除之前的状态
+
+    in al, 0xa1
+    and al, 0xfe    ;打开从片第0位的标志，从而可以使用RTC电路
+    out 0xa1, al
+
 .call_x64_main:
-
     call x64_main
-
     jmp $
 
 ; rsi           <---rsp

@@ -39,7 +39,9 @@ void general_interrupt_handler() {
  */
 void clock_interrupt_handler() {
     printk("start clock_interrupt_handler\n");
+    send_eoi(0x20);
 }
+
 
 
 void install_idt(int index, long long handler, short selector, char ist, char dpl) {
@@ -72,6 +74,7 @@ void idt_init() {
     }
     install_idt(0x20, (long long) &clock_interrupt, 0x18, 0, 0);
     install_idt(0x21, (long long) &keymap_interrupt, 0x18, 0, 0);
+    install_idt(0x28, (long long) &rtc_interrupt, 0x18, 0, 0);
 
     idtrx64.limit = sizeof(idt) - 1;
     idtrx64.base = &idt;
