@@ -36,4 +36,6 @@ extern void clock_interrupt();
 
 extern void keymap_interrupt();
 
+extern long long interrupt_handler_table[0x1f];
+
 #endif //x86_64_IDT_H

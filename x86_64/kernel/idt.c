@@ -64,10 +64,14 @@ void idt_init() {
 
     memcpy(&idt, 0, 255);
     for (int i = 0; i < 255; ++i) {
-        install_idt(i, &general_interrupt_handler, 0x18, 0, 0);
+        if (i < 0x1f) {
+            install_idt(i, interrupt_handler_table[i], 0x18, 0, 0);
+        } else {
+            install_idt(i, (long long) &general_interrupt_handler, 0x18, 0, 0);
+        }
     }
-    install_idt(0x20, &clock_interrupt, 0x18, 0, 0);
-    install_idt(0x21, &keymap_interrupt, 0x18, 0, 0);
+    install_idt(0x20, (long long) &clock_interrupt, 0x18, 0, 0);
+    install_idt(0x21, (long long) &keymap_interrupt, 0x18, 0, 0);
 
     idtrx64.limit = sizeof(idt) - 1;
     idtrx64.base = &idt;
